@@ -61,7 +61,8 @@ section:not(.hero,.skeleton-page,.config-view){padding:clamp(100px,13vw,190px) c
 .hero .tagline{margin-top:7px;font-size:clamp(12px,1vw,15px);color:#6f716c}
 .hero-carousel-wrap{position:absolute;inset:clamp(182px,20vh,218px) 0 22px;z-index:3}
 .product-carousel{height:100%;display:grid;grid-template-rows:minmax(0,1fr) 58px}
-.carousel-viewport{overflow:hidden;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.carousel-viewport{overflow:hidden;width:100%;height:100%;touch-action:pan-y;cursor:grab;outline:none}
+.carousel-viewport:focus-visible{box-shadow:inset 0 0 0 1px #11120f33}
 .carousel-viewport:active{cursor:grabbing}
 .carousel-rail{--slide-width:76vw;--slide-gap:24px;height:100%;display:flex;gap:var(--slide-gap);width:max-content;padding-inline:calc((100vw - var(--slide-width))/2);will-change:transform}
 .product-slide{position:relative;flex:0 0 var(--slide-width);height:100%;min-height:410px;overflow:hidden;border:1px solid #11120f0c;transform:scale(.955);opacity:.62;transition:opacity .62s cubic-bezier(.22,1,.36,1),transform .62s cubic-bezier(.22,1,.36,1);user-select:none}

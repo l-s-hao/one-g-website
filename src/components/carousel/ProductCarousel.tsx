@@ -22,12 +22,23 @@ export function ProductCarousel() {
   useEffect(() => { measure(); const observer=new ResizeObserver(measure); if(viewport.current) observer.observe(viewport.current); return()=>observer.disconnect() },[measure])
   const select = useCallback((index:number) => setCurrent(Math.max(0,Math.min(products.length-1,index))),[])
   const onWheel = (event: React.WheelEvent) => {
-    if(Math.abs(event.deltaX)<24 || wheelLock.current) return
-    wheelLock.current=true; select(current+(event.deltaX>0?1:-1)); window.setTimeout(()=>wheelLock.current=false,520)
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+    if (Math.abs(delta) < 18 || wheelLock.current) return
+    const nextIndex = current + (delta > 0 ? 1 : -1)
+    if (nextIndex < 0 || nextIndex >= products.length) return
+    event.preventDefault()
+    wheelLock.current = true
+    select(nextIndex)
+    window.setTimeout(() => wheelLock.current = false, 560)
   }
   return <div className="product-carousel">
-    <div className="carousel-viewport" ref={viewport} onWheel={onWheel}>
-      <motion.div ref={rail} className="carousel-rail" drag="x" dragConstraints={{left:offsets.at(-1)??0,right:offsets[0]??0}} dragElastic={.06} animate={{x:offsets[current]??0}} transition={{duration:.62,ease:[.22,1,.36,1]}} onDragEnd={(_,info)=>{if(info.offset.x < -55 || info.velocity.x < -450) select(current+1); else if(info.offset.x > 55 || info.velocity.x > 450) select(current-1)}}>
+    <div className="carousel-viewport" ref={viewport} onWheel={onWheel} tabIndex={0} role="region" aria-label="ONE-G 产品轮播" onKeyDown={event=>{if(event.key==='ArrowLeft')select(current-1);if(event.key==='ArrowRight')select(current+1)}}>
+      <motion.div ref={rail} className="carousel-rail" drag="x" dragConstraints={{left:offsets.at(-1)??0,right:offsets[0]??0}} dragElastic={.06} animate={{x:offsets[current]??0}} transition={{duration:.62,ease:[.22,1,.36,1]}} onDragEnd={(_,info)=>{
+        const slideDistance = offsets.length > 1 ? Math.abs(offsets[1]-offsets[0]) : 1
+        const steps = Math.max(1,Math.round(Math.abs(info.offset.x)/slideDistance))
+        if(info.offset.x < -55 || info.velocity.x < -450) select(current+steps)
+        else if(info.offset.x > 55 || info.velocity.x > 450) select(current-steps)
+      }}>
         {products.map((product,index)=><ProductSlide product={product} active={index===current} onSelect={()=>select(index)} key={product.id}/>) }
       </motion.div>
     </div>
