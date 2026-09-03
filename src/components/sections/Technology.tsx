@@ -1,0 +1,2 @@
+import { Reveal } from '../ui/Reveal'
+export function Technology(){return <section className="technology"><Reveal className="tech-copy"><p className="section-no">05 / ONE CORE</p><h2>一个智能核心。<br/>跨越每一种本体。</h2><p>感知、运动、控制与智能，在同一个系统中协同。</p></Reveal><Reveal className="core-map"><div className="core-center">ONE-G<span>CORE</span></div>{['感知','运动','控制','智能'].map((x,i)=><div className={`core-node n${i+1}`} key={x}><span>0{i+1}</span>{x}</div>)}</Reveal></section>}
